@@ -17,6 +17,7 @@ export const App = () => {
 
   const handleQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
+    setIsError(false);
   };
 
   const handleSearch = () => {
@@ -27,7 +28,10 @@ export const App = () => {
     return {
       title: data.Title,
       description: data.Plot,
-      imgUrl: data.Poster,
+      imgUrl:
+        data.Poster && data.Poster !== 'N/A'
+          ? data.Poster
+          : 'https://via.placeholder.com/360x270.png?text=no%20preview',
       imdbUrl: `https://www.imdb.com/title/${data.imdbID}`,
       imdbId: data.imdbID,
     };
@@ -51,6 +55,7 @@ export const App = () => {
           setIsError(false);
         } else {
           setIsError(true);
+          setSelectedMovie(null);
         }
       })
       .finally(() => setLoading(false));
@@ -80,6 +85,8 @@ export const App = () => {
                 setMovies(prev => [...prev, selectedMovie]);
               }
 
+              setQuery('');
+              setSearchQuery('');
               setSelectedMovie(null);
             }
           }}
